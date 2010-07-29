@@ -1,0 +1,4 @@
+Changelog for ActiveDirectory.
+
+ActiveDirectory 1.0.0
+=====================
