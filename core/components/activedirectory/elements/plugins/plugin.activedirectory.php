@@ -29,7 +29,11 @@
  * @package activedirectory
  */
 $mad = $modx->getService('mad','modActiveDirectory',$modx->getOption('activedirectory.core_path',null,$modx->getOption('core_path').'components/activedirectory/').'model/activedirectory/',$scriptProperties);
-if (!($mad instanceof modActiveDirectory)) return '';
+if (!($mad instanceof modActiveDirectory)) {
+    $modx->log(modX::LOG_LEVEL_ERROR,'[ActiveDirectory] Could not load ActiveDirectory class.');
+    $modx->event->output(true);
+    return;
+}
 $madDriver = $mad->loadDriver();
 if (!($madDriver instanceof modActiveDirectoryDriver)) {
     $modx->log(modX::LOG_LEVEL_ERROR,'[ActiveDirectory] Could not load ActiveDirectoryDriver class.');

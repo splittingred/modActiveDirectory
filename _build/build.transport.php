@@ -116,6 +116,9 @@ $vehicle->resolve('file',array(
 $vehicle->resolve('php',array(
     'source' => $sources['resolvers'] . 'resolver.extpack.php',
 ));
+$vehicle->resolve('php',array(
+    'source' => $sources['resolvers'] . 'resolver.patch.php',
+));
 $builder->putVehicle($vehicle);
 unset($vehicle,$attributes,$plugin);
 

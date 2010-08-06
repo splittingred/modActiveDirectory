@@ -193,7 +193,7 @@ class modActiveDirectory {
             $this->modx->log(xPDO::LOG_LEVEL_DEBUG,'[ActiveDirectory] Syncing field "'.$map[$k].'" to: "'.$v[0].'"');
             $profile->set($map[$k],$v[0]);
         }
-        $id = $user->get('id');
+        $id = $profile->get('internalKey');
         if (!empty($id)) {
             $saved = $profile->save();
         }
