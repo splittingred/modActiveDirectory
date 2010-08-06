@@ -107,7 +107,7 @@ $settings['activedirectory.use_tls']= $modx->newObject('modSystemSetting');
 $settings['activedirectory.use_tls']->fromArray(array(
     'key' => 'activedirectory.use_tls',
     'value' => false,
-    'xtype' => 'textfield',
+    'xtype' => 'combo-boolean',
     'namespace' => 'activedirectory',
     'area' => 'ActiveDirectory',
 ),'',true,true);
