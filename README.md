@@ -6,6 +6,8 @@ This is an ActiveDirectory integration for MODx Revolution.
 
 Simply install via Package Management in MODx Revolution.
 
+* You may need to make the manager/controllers/security/login.php file writable by PHP, if it is not already. modActiveDirectory patches a bug in that file that is in Revo 2.0.0-pl.
+
 From there, you'll need to setup some settings:
 
 * activedirectory.account_suffix : The account suffix for your domain. Usually in @forest.domain format.
@@ -19,3 +21,4 @@ If you'd like to disable this, set the activedirectory.autoadd_adgroups System S
 
 modActiveDirectory also allows you to specify a comma-separated list of MODx UserGroup names to automatically add the User to. This can be set in the activedirectory.autoadd_usergroups setting.
 
+Make sure you give the User Groups the User will auto-join access to the manager (through Access Controls), should you want your ActiveDirectory users to have mgr access.
