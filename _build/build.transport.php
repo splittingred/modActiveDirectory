@@ -1,5 +1,29 @@
 <?php
 /**
+ * modActiveDirectory
+ *
+ * Copyright 2010 by Shaun McCormick <shaun@modx.com>
+ *
+ * This file is part of modActiveDirectory, which integrates Active Directory
+ * authentication into MODx Revolution.
+ *
+ * modActiveDirectory is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * modActiveDirectory is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * modActiveDirectory; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ * @package activedirectory
+ */
+/**
  * ActiveDirectory build script
  *
  * @package activedirectory
@@ -58,7 +82,7 @@ $plugin->fromArray(array(
     'id' => 1,
     'name' => 'ActiveDirectory',
     'description' => '',
-    'plugincode' => getSnippetContent($sources['plugins'] . 'activedirectory.plugin.php'),
+    'plugincode' => getSnippetContent($sources['plugins'] . 'plugin.activedirectory.php'),
 ),'',true,true);
 $events = include $sources['data'].'events/events.activedirectory.php';
 if (is_array($events) && !empty($events)) {
@@ -89,6 +113,9 @@ $vehicle->resolve('file',array(
     'source' => $sources['source_core'],
     'target' => "return MODX_CORE_PATH . 'components/';",
 ));
+$vehicle->resolve('php',array(
+    'source' => $sources['resolvers'] . 'resolver.extpack.php',
+));
 $builder->putVehicle($vehicle);
 unset($vehicle,$attributes,$plugin);
 
@@ -110,46 +137,13 @@ if (!is_array($settings)) {
 }
 unset($settings,$setting,$attributes);
 
-/* load menu */
-$menu = include $sources['data'].'transport.menu.php';
-if (empty($menu)) {
-    $modx->log(modX::LOG_LEVEL_ERROR,'Could not package in menu.');
-} else {
-    $vehicle= $builder->createVehicle($menu,array (
-        xPDOTransport::PRESERVE_KEYS => true,
-        xPDOTransport::UPDATE_OBJECT => true,
-        xPDOTransport::UNIQUE_KEY => 'text',
-        xPDOTransport::RELATED_OBJECTS => true,
-        xPDOTransport::RELATED_OBJECT_ATTRIBUTES => array (
-            'Action' => array (
-                xPDOTransport::PRESERVE_KEYS => false,
-                xPDOTransport::UPDATE_OBJECT => true,
-                xPDOTransport::UNIQUE_KEY => array ('namespace','controller'),
-            ),
-        ),
-    ));
-    $modx->log(modX::LOG_LEVEL_INFO,'Adding in PHP resolvers...');
-    $vehicle->resolve('php',array(
-        'source' => $sources['resolvers'] . 'resolve.tables.php',
-    ));
-    $vehicle->resolve('php',array(
-        'source' => $sources['resolvers'] . 'resolve.paths.php',
-    ));
-    $vehicle->resolve('php',array(
-        'source' => $sources['resolvers'] . 'resolve.dbchanges.php',
-    ));
-    $builder->putVehicle($vehicle);
-    $modx->log(modX::LOG_LEVEL_INFO,'Packaged in menu.');
-}
-unset($vehicle,$menu);
-
 /* now pack in the license file, readme and setup options */
 $builder->setPackageAttributes(array(
     'license' => file_get_contents($sources['docs'] . 'license.txt'),
     'readme' => file_get_contents($sources['docs'] . 'readme.txt'),
-    'setup-options' => array(
-        'source' => $sources['build'].'setup.options.php',
-    ),
+    //'setup-options' => array(
+    //   'source' => $sources['build'].'setup.options.php',
+    //),
 ));
 $modx->log(modX::LOG_LEVEL_INFO,'Added package attributes and setup options.');
 

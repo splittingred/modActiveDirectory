@@ -1,5 +1,29 @@
 <?php
 /**
+ * modActiveDirectory
+ *
+ * Copyright 2010 by Shaun McCormick <shaun@modx.com>
+ *
+ * This file is part of modActiveDirectory, which integrates Active Directory
+ * authentication into MODx Revolution.
+ *
+ * modActiveDirectory is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * modActiveDirectory is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * modActiveDirectory; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ * @package activedirectory
+ */
+/**
  * The base class for ActiveDirectory.
  *
  * @package activedirectory
@@ -26,6 +50,7 @@ class modActiveDirectory {
             'modelPath' => $corePath.'model/',
             'chunksPath' => $corePath.'elements/chunks/',
             'pagesPath' => $corePath.'elements/pages/',
+            'eventsPath' => $corePath.'elements/events/',
             'snippetsPath' => $corePath.'elements/snippets/',
             'processorsPath' => $corePath.'processors/',
             'hooksPath' => $corePath.'hooks/',
@@ -63,6 +88,15 @@ class modActiveDirectory {
                 $this->modx->lexicon->load('activedirectory:web');
             break;
         }
+    }
+
+    public function loadDriver() {
+        $madDriver = $this->modx->getService('madDriver','modActiveDirectoryDriver',$this->config['modelPath'].'activedirectory/');
+        if (!($madDriver instanceof modActiveDirectoryDriver)) {
+            $this->modx->log(modX::LOG_LEVEL_ERROR,'[mAD] Could not load modActiveDirectoryDriver class from: '.$this->config['modelPath']);
+            return $madDriver;
+        }
+        return $madDriver;
     }
 
     /**
@@ -109,5 +143,64 @@ class modActiveDirectory {
             $chunk->setContent($o);
         }
         return $chunk;
+    }
+
+    public function getGroupsFromInfo($data) {
+        if (empty($data['memberof'])) return array();
+        
+        $groupStrings = $data['memberof'];
+        $adGroups = array();
+        foreach ($groupStrings as $k => $groupString) {
+            if (!is_int($k)) continue;
+            $groupData = explode(',',$groupString);
+            foreach ($groupData as $groupDataRecord) {
+                if (strpos($groupDataRecord,'CN=') === false && strpos($groupDataRecord,'cn=') === false) continue;
+                $groupDataRecord = str_replace(array('CN=','cn='),'',$groupDataRecord);
+                if (!empty($groupDataRecord)) {
+                    $adGroups[] = $groupDataRecord;
+                }
+            }
+        }
+        $adGroups = array_unique($adGroups);
+        return $adGroups;
+    }
+
+    /**
+     * Sync the User's Profile with the ActiveDirectory data
+     *
+     * TODO: After Revo 2.0.1, move this to modActiveDirectoryUser. Cant now
+     * because class isnt accessible from onauthenticate
+     * @param array $data An array of userinfo data
+     */
+    public function syncProfile(modUserProfile &$profile,$data) {
+        /* map of ActiveDirectory => MODx Profile fields */
+        $map = array(
+            'name' => 'fullname',
+            'mail' => 'email',
+            'streetaddress' => 'address',
+            'l' => 'city',
+            'st' => 'state',
+            'co' => 'country',
+            'postalcode' => 'zip',
+            'mobile' => 'mobilephone',
+            'telephonenumber' => 'phone',
+            'info' => 'comment',
+            'wwwhomepage' => 'website',
+        );
+
+        foreach ($data as $k => $v) {
+            if (!is_array($v) || !array_key_exists($k,$map)) continue;
+            $this->modx->log(xPDO::LOG_LEVEL_DEBUG,'[ActiveDirectory] Syncing field "'.$map[$k].'" to: "'.$v[0].'"');
+            $profile->set($map[$k],$v[0]);
+        }
+        $id = $user->get('id');
+        if (!empty($id)) {
+            $saved = $profile->save();
+        }
+        //$saved = $user->syncProfile($userInfo);
+        if (!$saved) {
+            $this->modx->log(modX::LOG_LEVEL_INFO,'[ActiveDirectory] User Profile information was unable to be synced.');
+        }
+        return $saved;
     }
 }
