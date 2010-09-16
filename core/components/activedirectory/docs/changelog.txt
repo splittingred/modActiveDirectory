@@ -2,3 +2,4 @@ Changelog for ActiveDirectory.
 
 ActiveDirectory 1.0.0
 =====================
+- Fixed issue with logins and empty passwords

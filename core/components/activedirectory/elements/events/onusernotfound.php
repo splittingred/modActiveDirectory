@@ -38,6 +38,7 @@ $username = is_object($scriptProperties['user']) && $scriptProperties['user'] in
 $connected = $madDriver->connect();
 if (!$connected) {
     $modx->log(modX::LOG_LEVEL_ERROR,'[ActiveDirectory] Could not connect via LDAP to Active Directory.');
+    $modx->event->output(false);
     return;
 }
 

@@ -30,7 +30,7 @@
  */
 $scriptProperties = $modx->event->params;
 if (empty($scriptProperties['user']) || !is_object($scriptProperties['user'])) {
-    $modx->event->output(true);
+    $modx->event->output(false);
     return;
 }
 $classKey = $scriptProperties['user']->get('class_key');
@@ -40,7 +40,7 @@ $success = false;
 $user =& $scriptProperties['user'];
 if (!is_object($user) || !($user instanceof modUser)) {
     $modx->log(modX::LOG_LEVEL_INFO,'[ActiveDirectory] The user specified is not a valid modUser.');
-    $modx->event->output(true);
+    $modx->event->output(false);
     return;
 }
 
@@ -48,7 +48,7 @@ if (!is_object($user) || !($user instanceof modUser)) {
 if ($user->get('class_key') != 'modActiveDirectoryUser') {
     $username = is_object($user) ? $user->get('username') : $user;
     $modx->log(modX::LOG_LEVEL_INFO,'[ActiveDirectory] User "'.$username.'" is not a modActiveDirectoryUser and therefore is being skipped.');
-    $modx->event->output(true);
+    $modx->event->output(false);
     return;
 }
 
