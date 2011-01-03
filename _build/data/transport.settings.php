@@ -44,7 +44,7 @@ $settings['activedirectory.enabled']= $modx->newObject('modSystemSetting');
 $settings['activedirectory.enabled']->fromArray(array(
     'key' => 'activedirectory.enabled',
     'value' => false,
-    'xtype' => 'textfield',
+    'xtype' => 'combo-boolean',
     'namespace' => 'activedirectory',
     'area' => 'ActiveDirectory',
 ),'',true,true);

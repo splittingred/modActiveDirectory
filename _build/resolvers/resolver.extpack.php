@@ -57,13 +57,22 @@ if ($object->xpdo) {
                     'path' => '[[++core_path]]components/activedirectory/model/',
                 );
             } else {
-                if (!array_key_exists('activedirectory',$value)) {
-                    $value['activedirectory'] = array(
+                $found = false;
+                foreach ($value as $k => $v) {
+                    foreach ($v as $kk => $vv) {
+                        if ($kk == 'activedirectory') {
+                            $found = true;
+                        }
+                    }
+                }
+                if (!$found) {
+                    $value[]['activedirectory'] = array(
                         'path' => '[[++core_path]]components/activedirectory/model/',
                     );
                 }
             }
             $value = $modx->toJSON($value);
+            $value = str_replace('\\','',$value);
             $setting->set('value',$value);
             $setting->save();
 
