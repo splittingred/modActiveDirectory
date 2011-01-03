@@ -28,7 +28,7 @@
  * 
  * @package activedirectory
  */
-if (!$modx->getOption('activedirectory.enabled')) return;
+if (!$modx->getOption('activedirectory.enabled',$scriptProperties,false)) return;
 $mad = $modx->getService('mad','modActiveDirectory',$modx->getOption('activedirectory.core_path',null,$modx->getOption('core_path').'components/activedirectory/').'model/activedirectory/',$scriptProperties);
 if (!($mad instanceof modActiveDirectory)) {
     $modx->log(modX::LOG_LEVEL_ERROR,'[ActiveDirectory] Could not load ActiveDirectory class.');
