@@ -56,6 +56,7 @@ if ($object->xpdo) {
                 $value['activedirectory'] = array(
                     'path' => '[[++core_path]]components/activedirectory/model/',
                 );
+                $value = '['.$modx->toJSON($value).']';
             } else {
                 $found = false;
                 foreach ($value as $k => $v) {
@@ -70,8 +71,8 @@ if ($object->xpdo) {
                         'path' => '[[++core_path]]components/activedirectory/model/',
                     );
                 }
+                $value = $modx->toJSON($value);
             }
-            $value = $modx->toJSON($value);
             $value = str_replace('\\','',$value);
             $setting->set('value',$value);
             $setting->save();
