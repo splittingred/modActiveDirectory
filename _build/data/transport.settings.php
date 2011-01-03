@@ -40,6 +40,15 @@ $settings['activedirectory.account_suffix']->fromArray(array(
     'area' => 'ActiveDirectory',
 ),'',true,true);
 
+$settings['activedirectory.enabled']= $modx->newObject('modSystemSetting');
+$settings['activedirectory.enabled']->fromArray(array(
+    'key' => 'activedirectory.enabled',
+    'value' => false,
+    'xtype' => 'textfield',
+    'namespace' => 'activedirectory',
+    'area' => 'ActiveDirectory',
+),'',true,true);
+
 $settings['activedirectory.autoadd_adgroups']= $modx->newObject('modSystemSetting');
 $settings['activedirectory.autoadd_adgroups']->fromArray(array(
     'key' => 'activedirectory.autoadd_adgroups',
