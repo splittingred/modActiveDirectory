@@ -50,13 +50,20 @@ if ($object->xpdo) {
                 $setting->set('area','system');
             }
             $value = $setting->get('value');
+            $value = $modx->fromJSON($value);
             if (empty($value)) {
-                $value = 'activedirectory:'.$modelPath;
+                $value = array();
+                $value['activedirectory'] = array(
+                    'path' => '[[++core_path]]components/activedirectory/model/',
+                );
             } else {
-                if (strpos($value,'activedirectory:') === false) {
-                    $value .= ',activedirectory:'.$modelPath;
+                if (!array_key_exists('activedirectory',$value)) {
+                    $value['activedirectory'] = array(
+                        'path' => '[[++core_path]]components/activedirectory/model/',
+                    );
                 }
             }
+            $value = $modx->toJSON($value);
             $setting->set('value',$value);
             $setting->save();
 
@@ -70,8 +77,9 @@ if ($object->xpdo) {
                 'key' => 'extension_packages',
             ));
             $value = $setting->get('value');
-            $value = str_replace(',activedirectory:'.$modelPath,'',$value);
-            $value = str_replace('activedirectory:'.$modelPath,'',$value);
+            $value = $modx->fromJSON($value);
+            unset($value['activedirectory']);
+            $value = $modx->toJSON($value);
             $setting->set('value',$value);
             $setting->save();
             break;

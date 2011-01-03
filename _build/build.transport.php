@@ -39,7 +39,7 @@ set_time_limit(0);
 define('PKG_NAME','modActiveDirectory');
 define('PKG_NAME_LOWER','activedirectory');
 define('PKG_VERSION','1.0.0');
-define('PKG_RELEASE','rc1');
+define('PKG_RELEASE','rc2');
 
 /* define sources */
 $root = dirname(dirname(__FILE__)).'/';
@@ -116,9 +116,10 @@ $vehicle->resolve('file',array(
 $vehicle->resolve('php',array(
     'source' => $sources['resolvers'] . 'resolver.extpack.php',
 ));
+/*
 $vehicle->resolve('php',array(
     'source' => $sources['resolvers'] . 'resolver.patch.php',
-));
+));*/
 $builder->putVehicle($vehicle);
 unset($vehicle,$attributes,$plugin);
 
@@ -144,6 +145,7 @@ unset($settings,$setting,$attributes);
 $builder->setPackageAttributes(array(
     'license' => file_get_contents($sources['docs'] . 'license.txt'),
     'readme' => file_get_contents($sources['docs'] . 'readme.txt'),
+    'changelog' => file_get_contents($sources['docs'] . 'changelog.txt'),
     //'setup-options' => array(
     //   'source' => $sources['build'].'setup.options.php',
     //),

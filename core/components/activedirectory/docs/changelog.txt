@@ -2,4 +2,5 @@ Changelog for ActiveDirectory.
 
 ActiveDirectory 1.0.0
 =====================
-- Fixed issue with logins and empty passwords
+- Fix issue with extension_packages setting, stop patching login.php file since now fixed in Revo
+- Fix issue with logins and empty passwords
