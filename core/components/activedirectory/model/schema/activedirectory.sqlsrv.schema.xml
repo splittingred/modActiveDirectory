@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model package="activedirectory" baseClass="xPDOObject" platform="sqlsrv" defaultEngine="MyISAM" phpdoc-package="activedirectory" phpdoc-subpackage="model">
+    <object class="modActiveDirectoryUser" table="users" extends="modUser" />
+</model>

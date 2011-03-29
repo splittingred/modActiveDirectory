@@ -26,7 +26,6 @@
 /**
  * @package activedirectory
  */
-$xpdo_meta_map['modActiveDirectoryUser']= array (
-  'package' => 'activedirectory',
-  'table' => 'users',
-);
+require_once (strtr(realpath(dirname(dirname(__FILE__))), '\\', '/') . '/modactivedirectoryuser.class.php');
+class modActiveDirectoryUser_sqlsrv extends modActiveDirectoryUser {}
+?>
