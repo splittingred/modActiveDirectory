@@ -38,7 +38,7 @@ set_time_limit(0);
 /* define package */
 define('PKG_NAME','modActiveDirectory');
 define('PKG_NAME_LOWER','activedirectory');
-define('PKG_VERSION','1.0.0');
+define('PKG_VERSION','1.0.1');
 define('PKG_RELEASE','pl');
 
 /* define sources */

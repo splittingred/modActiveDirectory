@@ -170,7 +170,10 @@ class modActiveDirectory {
      *
      * TODO: After Revo 2.0.1, move this to modActiveDirectoryUser. Cant now
      * because class isnt accessible from onauthenticate
+     * 
+     * @param modUserProfile $profile
      * @param array $data An array of userinfo data
+     * @return boolean
      */
     public function syncProfile(modUserProfile &$profile,$data) {
         /* map of ActiveDirectory => MODx Profile fields */

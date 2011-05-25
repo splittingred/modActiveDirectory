@@ -89,6 +89,11 @@ class modActiveDirectoryDriver {
     const OPT_ADMIN_USERNAME = 'activedirectory.admin_username';
     const OPT_ADMIN_PASSWORD = 'activedirectory.admin_password';
 
+    const OPT_LDAP_PROTOCOL_VERSION = 'activedirectory.ldap_opt_protocol_version';
+    const OPT_LDAP_TIMELIMIT = 'activedirectory.ldap_opt_timelimit';
+    const OPT_LDAP_REFERRALS = 'activedirectory.ldap_opt_referrals';
+    const OPT_LDAP_SSL_PORT = 'activedirectory.ldap_opt_ssl_port';
+
     public $config = array();
     public $modx = null;
     
@@ -102,13 +107,13 @@ class modActiveDirectoryDriver {
     protected $_bind;
 
     /**
-    * Default Constructor
-    *
-    * Tries to bind to the AD domain over LDAP or LDAPs
-    *
-    * @param array $options Array of options to pass to the constructor
-    * @return bool
-    */
+     * Default Constructor
+     *
+     * Tries to bind to the AD domain over LDAP or LDAPs
+     *
+     * @param modX $modx A reference to the modX object
+     * @param array $config Array of options to pass to the constructor
+     */
     function __construct(modX $modx, array $config = array()) {
         $this->modx =& $modx;
         $this->config = array_merge(array(
@@ -118,7 +123,7 @@ class modActiveDirectoryDriver {
             $this->modx->log(modX::LOG_LEVEL_ERROR,'[ActiveDirectory] No LDAP support for PHP. See: http://www.php.net/ldap');
         }
 
-        return $this->connect();
+        $this->connect();
     }
 
     /**
@@ -152,15 +157,15 @@ class modActiveDirectoryDriver {
         // Connect to the AD/LDAP server as the username/password
         $dc = $this->getRandomController();
         if ($useSsl) {
-            $this->_conn = ldap_connect("ldaps://".$dc, 636);
+            $this->_conn = ldap_connect("ldaps://".$dc, (int)$this->getOption(modActiveDirectoryDriver::OPT_LDAP_SSL_PORT,636));
         } else {
             $this->_conn = ldap_connect($dc);
         }
 
         // Set some ldap options for talking to AD
-        ldap_set_option($this->_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
-        ldap_set_option($this->_conn, LDAP_OPT_REFERRALS, 1);
-        ldap_set_option($this->_conn, LDAP_OPT_TIMELIMIT, 10);
+        ldap_set_option($this->_conn, LDAP_OPT_PROTOCOL_VERSION, (int)$this->getOption(modActiveDirectoryDriver::OPT_LDAP_PROTOCOL_VERSION,3));
+        ldap_set_option($this->_conn, LDAP_OPT_REFERRALS, (int)$this->getOption(modActiveDirectoryDriver::OPT_LDAP_REFERRALS,0));
+        ldap_set_option($this->_conn, LDAP_OPT_TIMELIMIT, (int)$this->getOption(modActiveDirectoryDriver::OPT_LDAP_TIMELIMIT,10));
 
         if ($useTls) {
             ldap_start_tls($this->_conn);
@@ -200,13 +205,15 @@ class modActiveDirectoryDriver {
     }
 
     /**
-    * Validate a user's login credentials
-    *
-    * @param string $username A user's AD username
-    * @param string $password A user's AD password
-    * @param bool optional $prevent_rebind
-    * @return bool
-    */
+     * Validate a user's login credentials
+     *
+     * @param string $username A user's AD username
+     * @param string $password A user's AD password
+     * @param bool $preventRebind
+     *
+     * @internal param \optional $bool $prevent_rebind
+     * @return bool
+     */
     public function authenticate($username,$password,$preventRebind = false){
         if (empty($username) || empty($password)) { return false; }
 
@@ -666,8 +673,10 @@ class modActiveDirectoryDriver {
     }
 
     /**
-    * Convert 8bit characters e.g. accented characters to UTF8 encoded characters
-    */
+     * Convert 8bit characters e.g. accented characters to UTF8 encoded characters
+     * @param $item
+     * @param $key
+     */
     protected function encode8bit(&$item, $key) {
         $encode = false;
         if (is_string($item)) {

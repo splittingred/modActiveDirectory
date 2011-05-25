@@ -121,4 +121,39 @@ $settings['activedirectory.use_tls']->fromArray(array(
     'area' => 'ActiveDirectory',
 ),'',true,true);
 
+/* LDAP-specific settings */
+$settings['activedirectory.ldap_opt_referrals']= $modx->newObject('modSystemSetting');
+$settings['activedirectory.ldap_opt_referrals']->fromArray(array(
+    'key' => 'activedirectory.ldap_opt_referrals',
+    'value' => 0,
+    'xtype' => 'textfield',
+    'namespace' => 'activedirectory',
+    'area' => 'LDAP',
+),'',true,true);
+$settings['activedirectory.ldap_opt_timelimit']= $modx->newObject('modSystemSetting');
+$settings['activedirectory.ldap_opt_timelimit']->fromArray(array(
+    'key' => 'activedirectory.ldap_opt_timelimit',
+    'value' => 10,
+    'xtype' => 'textfield',
+    'namespace' => 'activedirectory',
+    'area' => 'LDAP',
+),'',true,true);
+$settings['activedirectory.ldap_opt_protocol_version']= $modx->newObject('modSystemSetting');
+$settings['activedirectory.ldap_opt_protocol_version']->fromArray(array(
+    'key' => 'activedirectory.ldap_opt_protocol_version',
+    'value' => 3,
+    'xtype' => 'textfield',
+    'namespace' => 'activedirectory',
+    'area' => 'LDAP',
+),'',true,true);
+$settings['activedirectory.ldap_opt_ssl_port']= $modx->newObject('modSystemSetting');
+$settings['activedirectory.ldap_opt_ssl_port']->fromArray(array(
+    'key' => 'activedirectory.ldap_opt_ssl_port',
+    'value' => 636,
+    'xtype' => 'textfield',
+    'namespace' => 'activedirectory',
+    'area' => 'LDAP',
+),'',true,true);
+
+
 return $settings;

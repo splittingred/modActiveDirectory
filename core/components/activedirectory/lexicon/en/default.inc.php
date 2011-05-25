@@ -50,3 +50,16 @@ $_lang['setting_activedirectory.use_ssl'] = 'Use SSL';
 $_lang['setting_activedirectory.use_ssl_desc'] = 'Use SSL (LDAPS). Your AD server will need to be setup to support this. Works only if use_tls is off.';
 $_lang['setting_activedirectory.use_tls'] = 'Use TLS';
 $_lang['setting_activedirectory.use_tls_desc'] = 'Use TLS. Your AD server will need to be setup to support this. Works only if use_ssl is off.';
+
+$_lang['setting_activedirectory.ldap_opt_referrals'] = 'Follow LDAP Referrals';
+$_lang['setting_activedirectory.ldap_opt_referrals_desc'] = 'Whether referrals should be followed by the LDAP client.';
+$_lang['setting_activedirectory.ldap_opt_timelimit'] = 'LDAP Timeout Limit';
+$_lang['setting_activedirectory.ldap_opt_timelimit_desc'] = 'Maximum number of seconds to wait for LDAP server when doing search results.';
+$_lang['setting_activedirectory.ldap_opt_protocol_version'] = 'LDAP Protocol Version';
+$_lang['setting_activedirectory.ldap_opt_protocol_version_desc'] = 'LDAP protocol version to use (V2 or V3)';
+$_lang['setting_activedirectory.ldap_opt_ssl_port'] = 'LDAP SSL Port';
+$_lang['setting_activedirectory.ldap_opt_ssl_port_desc'] = 'When using SSL, the SSL port to connect to.';
+$_lang['setting_activedirectory.'] = '';
+$_lang['setting_activedirectory._desc'] = '';
+$_lang['setting_activedirectory.'] = '';
+$_lang['setting_activedirectory._desc'] = '';

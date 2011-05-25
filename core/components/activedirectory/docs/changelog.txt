@@ -1,5 +1,10 @@
 Changelog for ActiveDirectory.
 
+ActiveDirectory 1.0.1
+=====================
+- Add more settings for LDAP connectivity
+- [#3] Fix issue with LDAP referrals and incorrect setting
+
 ActiveDirectory 1.0.0
 =====================
 - Add sqlsrv support
